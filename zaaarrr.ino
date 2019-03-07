@@ -1,0 +1,65 @@
+//https://www.arduino.cc/en/Tutorial/ShiftOut
+
+
+//connected to DS
+int dataPin = 2;
+//connected to SH_CP
+int clockPin = 3;
+//connected to ST_CP
+int latchPin = 4;
+
+int button = 0;
+
+byte data[6][7]=
+{
+  {1,0,0,0,0,0,0},
+  {0,1,0,0,0,0,0},
+  {0,0,1,0,0,0,0},
+  {0,0,0,1,0,0,0},
+  {0,0,0,0,1,0,0},
+  {0,0,0,0,0,1,0},
+};
+int saya[6] = {1,2,9,18,37,114};
+bool check_button(bool pin)
+{
+  button = digitalRead(5);
+  if (button == HIGH) {
+    return true;
+  }
+   else if (button == LOW) {
+   return false;
+}
+}
+
+void setup(){
+  pinMode(dataPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  pinMode(latchPin, OUTPUT);
+  pinMode(5, INPUT_PULLUP);
+  
+}
+
+void loop(){
+  Serial.begin(9600);
+  if(check_button(5)){
+    go();
+    
+   
+  } 
+}
+
+void go(void){
+  int say = random(0,6);
+  Serial.println(say);
+ 
+  digitalWrite(latchPin,LOW);
+  for (int i = 0; i >=0; i--){
+    shiftOut(dataPin, clockPin, LSBFIRST, data[saya[say]]);
+    Serial.println(saya[say]);
+    delay(50);
+    
+    
+  }
+  digitalWrite(latchPin,HIGH);
+}
+ 
